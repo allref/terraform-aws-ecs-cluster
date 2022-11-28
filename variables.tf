@@ -71,10 +71,11 @@ variable "capacity_providers_ec2" {
         delete_on_termination = bool
         encrypted             = bool
         iops                  = number
+        throughput            = number
         kms_key_id            = string
         snapshot_id           = string
         volume_size           = number
-        volume_               = string
+        volume_type           = string
       })
     })), [])
     instance_market_options = optional(object({
@@ -168,6 +169,24 @@ variable "capacity_providers_ec2" {
   default = {}
   validation {
     condition     = !contains(["FARGATE", "FARGATE_SPOT"], keys(var.capacity_providers_ec2))
+    error_message = "'FARGATE' and 'FARGATE_SPOT' name is reserved"
+  }
+}
+
+variable "external_ec2_capacity_providers" {
+  description = "External EC2 autoscale groups capacity providers"
+  type = map(object({
+    autoscaling_group_arn          = string
+    managed_termination_protection = bool
+    managed_scaling_status         = bool
+    instance_warmup_period         = optional(number, 300)
+    maximum_scaling_step_size      = optional(number, 1)
+    minimum_scaling_step_size      = optional(number, 1)
+    target_capacity_utilization    = optional(number, 100)
+  }))
+  default = {}
+  validation {
+    condition     = !contains(["FARGATE", "FARGATE_SPOT"], keys(var.external_ec2_capacity_providers))
     error_message = "'FARGATE' and 'FARGATE_SPOT' name is reserved"
   }
 }
