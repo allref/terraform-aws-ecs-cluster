@@ -64,17 +64,18 @@ variable "capacity_providers_ec2" {
     ebs_optimized                        = optional(bool, false)
     associate_public_ip_address          = optional(bool, false)
     block_device_mappings = optional(list(object({
-      device_name  = string
-      no_device    = bool
-      virtual_name = string
+      device_name  = optional(string)
+      no_device    = optional(bool)
+      virtual_name = optional(string)
       ebs = object({
-        delete_on_termination = bool
-        encrypted             = bool
-        iops                  = number
-        kms_key_id            = string
-        snapshot_id           = string
-        volume_size           = number
-        volume_               = string
+        delete_on_termination = optional(bool, null)
+        encrypted             = optional(bool, null)
+        iops                  = optional(number, null)
+        throughput            = optional(number, null)
+        kms_key_id            = optional(string, null)
+        snapshot_id           = optional(string, null)
+        volume_size           = optional(number, null)
+        volume_type           = optional(string, null)
       })
     })), [])
     instance_market_options = optional(object({
