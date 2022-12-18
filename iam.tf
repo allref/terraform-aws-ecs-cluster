@@ -53,9 +53,9 @@ resource "aws_iam_policy" "iam_policy" {
 }
 
 resource "aws_iam_role_policy_attachment" "iam_role_policy_attachment" {
-  for_each = [
+  for_each = toset([
     for policy in aws_iam_policy.iam_policy : policy.arn
-  ]
+  ])
   policy_arn = each.value
   role       = join("", aws_iam_role.default.*.name)
 }
