@@ -209,7 +209,7 @@ variable "default_capacity_strategy" {
   }
 }
 
-variable "additional_default_policy_statements" {
-  description = "Map of additional policy statements to attach to all EC2 instances in the cluster."
+variable "additional_policies" {
+  description = "Map of additional policies where key is name and value is statement string."
   type        = map(any)
 }

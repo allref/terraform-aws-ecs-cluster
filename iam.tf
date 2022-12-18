@@ -47,7 +47,7 @@ resource "aws_iam_role_policy_attachment" "default" {
 }
 
 resource "aws_iam_policy" "iam_policy" {
-  for_each = var.additional_default_policy_statements
+  for_each = var.additional_policies
   name     = each.key
   policy   = each.value
 }
