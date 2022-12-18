@@ -22,14 +22,6 @@ data "aws_iam_policy_document" "assume" {
     }
     effect = "Allow"
   }
-  dynamic "statement" {
-    for_each = var.additional_default_policy_statements
-    content {
-      actions   = statement.value["actions"]
-      resources = statement.value["resources"]
-      effect    = statement.value["effect"]
-    }
-  }
 }
 
 resource "aws_iam_role" "default" {
@@ -52,4 +44,18 @@ resource "aws_iam_role_policy_attachment" "default" {
   depends_on = [
     aws_iam_role.default
   ]
+}
+
+resource "aws_iam_policy" "iam_policy" {
+  for_each = var.additional_default_policy_statements
+  name     = each.key
+  policy   = each.value
+}
+
+resource "aws_iam_role_policy_attachment" "iam_role_policy_attachment" {
+  for_each = [
+    for policy in aws_iam_policy.iam_policy : policy.arn
+  ]
+  policy_arn = each.value
+  role       = join("", aws_iam_role.default.*.name)
 }
