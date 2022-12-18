@@ -22,6 +22,14 @@ data "aws_iam_policy_document" "assume" {
     }
     effect = "Allow"
   }
+  dynamic "statement" {
+    for_each = var.additional_default_policy_statements
+    content {
+      actions   = statement.value["actions"]
+      resources = statement.value["resources"]
+      effect    = statement.value["effect"]
+    }
+  }
 }
 
 resource "aws_iam_role" "default" {

@@ -208,3 +208,9 @@ variable "default_capacity_strategy" {
     weights = {}
   }
 }
+
+variable "additional_default_policy_statements" {
+  description = "Map of additional policy statements to attach to all EC2 instances in the cluster."
+  type = map(any)
+  default = {}
+}
