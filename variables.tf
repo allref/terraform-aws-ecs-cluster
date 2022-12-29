@@ -212,4 +212,5 @@ variable "default_capacity_strategy" {
 variable "additional_policy" {
   description = "Additional policy."
   type        = string
+  default = null
 }

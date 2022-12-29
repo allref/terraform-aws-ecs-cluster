@@ -47,11 +47,13 @@ resource "aws_iam_role_policy_attachment" "default" {
 }
 
 resource "aws_iam_policy" "iam_policy" {
+  count = var.additional_policy != null ? 1 : 0
   name   = module.this.id
   policy = var.additional_policy
 }
 
 resource "aws_iam_role_policy_attachment" "iam_role_policy_attachment" {
-  policy_arn = aws_iam_policy.iam_policy.arn
+  count = var.additional_policy != null ? 1 : 0
+  policy_arn = aws_iam_policy.iam_policy[0].arn
   role       = join("", aws_iam_role.default.*.name)
 }
